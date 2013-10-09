@@ -1,0 +1,40 @@
+<!doctype html>
+<html ng-app>
+    <head>
+        <script src="bower_components/jquery/jquery.min.js"></script>
+        <script src="bower_components/angular/angular.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="app.js"></script>
+
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="bower_components/bootstrap/dist//css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body ng-controller="Controller">
+        <div class="container">
+            <div class="page-header">
+                <h1>Top warning killers!</h1>
+            </div>
+            <div class="member panel panel-default" ng-repeat="member in members">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{member.name}}</h3>
+                </div>
+                <div class="panel-body row ">
+                    <div class="col-md-1">
+                        <img ng-src="{{member.avatar}}"/>
+                        <span class="counter">
+                            {{member.kills}}
+                        </span>
+                    </div>
+                    <div class="col-md-11">
+                        <ul class="list-unstyled list-inline">
+                            <li ng-repeat="kill in member.killsArr">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

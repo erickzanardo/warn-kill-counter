@@ -1,0 +1,9 @@
+.member img {
+    max-width: 80px;
+}
+
+.member .counter {
+    font-size: 50px;
+    opacity: 0.1;
+    font-weight:bold;
+}
