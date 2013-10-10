@@ -77,7 +77,8 @@ http.createServer(function (request, response) {
         });
 
         request.on('end', function () {
-            var pushData = JSON.parse(body);
+            var formData = qs.parse(body);
+            var pushData = JSON.parse(formData.payload);
 
             var commits = [];
             var pushCommits = pushData.commits;
