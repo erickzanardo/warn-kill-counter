@@ -1,6 +1,12 @@
 var http = require('http');
 var qs = require('querystring');
-var serverPort = 8080;
+
+if (process.argv.length != 4) {
+    throw 'Invalid call, example, from user project pom directory run: "node warn-kill-counter/app/app.js https://warning-kill-ranks.firebaseio.com/dev 8080"'
+}
+
+var basePath = process.argv[2];
+var serverPort = parseInt(process.argv[3])
 
 var GITHUB_COMMAND = 'git pull origin master && git checkout ';
 var MAVEN_COMMAND = 'mvn clean install -Dmaven.test.skip.exec=true -Dmaven.compiler.showDeprecation=true | grep WARNING | grep deprecated | wc -l';
@@ -49,7 +55,6 @@ var executeCommit = function () {
                 }
                 baseData.warns = baseWarns - points;
 
-                console.log(baseData);
                 baseRef.set(JSON.stringify(baseData), function(error) {
                     console.log('Done commit: ' + commit.id);
                     if (queue.length) {
