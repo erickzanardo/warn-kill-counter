@@ -18,7 +18,7 @@ var executing = false;
 var queue = [];
 
 var Firebase = require('firebase');
-var baseRef = new Firebase('https://warning-kill-ranks.firebaseio.com/dev');
+var baseRef = new Firebase(basePath);
 
 var executeCommit = function () {
     var commit = queue.shift();

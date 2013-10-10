@@ -1,10 +1,15 @@
 (function () {
-    Controller = function ($scope, $http) {
+    angular.module('rank', ['firebase'])
+            .controller('Controller', ['$scope', '$http', 'angularFire',
+     function ($scope, $http, angularFire) {
         $scope.members = [];
-        
-        $http.get('mock.json').success(function (data) {
-            for (var i = 0; i < data.length; i++) {
-                var d = data[i];
+        var baseRef = new Firebase('https://warning-kill-ranks.firebaseio.com/dev');
+         
+        var promise = angularFire(baseRef, $scope, 'data', '');
+        promise.then(function() {
+            var data = JSON.parse($scope.data);
+            for (var i in data.users) {
+                var d = data.users[i];
                 var user = {
                     username:  d.username,
                     kills: d.kills,
@@ -14,8 +19,8 @@
             }
             fetchUsers($scope, $http);
         });
-    };
-    
+    }]);
+                                                             
     var BASE_URL = "https://api.github.com/users/";
     
     var GithubFetcher = function(i, $scope, $http) {
