@@ -103,5 +103,9 @@ http.createServer(function (request, response) {
         });
         
     }
+    
+    if(request.method == 'GET') {
+        response.end('Alive!');
+    }
 }).listen(serverPort);
 console.log('Server running at localhost:' + serverPort);
