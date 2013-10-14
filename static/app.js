@@ -2,8 +2,7 @@
      Controller = function ($scope, $http) {
         $scope.members = [];
          
-        $http.get('data.js').success(function() {
-            var data = JSON.parse($scope.data);
+        $http.get('data.js').success(function(data) {
             for (var i in data.users) {
                 var d = data.users[i];
                 var user = {
