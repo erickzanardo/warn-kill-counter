@@ -94,7 +94,16 @@ http.createServer(function (request, response) {
             var commits = [];
             var pushCommits = pushData.commits;
             for (var i = 0; i < pushCommits.length; i++) {
+                
                 var pushCommit = pushCommits[i];
+                
+                var message = pushCommit.mesage;
+                
+                if (message.indexOf('Merge branch') != -1) {
+                    console.log('Ignoring merge commit: ' + pushCommit.id);
+                    continue;
+                }
+                
                 var commit = {
                     author: pushCommit.committer.username,
                     id: pushCommit.id
