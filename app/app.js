@@ -97,7 +97,7 @@ http.createServer(function (request, response) {
                 
                 var pushCommit = pushCommits[i];
                 
-                var message = pushCommit.mesage;
+                var message = pushCommit.message;
                 
                 if (message.indexOf('Merge branch') != -1) {
                     console.log('Ignoring merge commit: ' + pushCommit.id);
