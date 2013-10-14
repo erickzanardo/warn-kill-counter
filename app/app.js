@@ -90,6 +90,7 @@ http.createServer(function (request, response) {
         request.on('end', function () {
             var formData = qs.parse(body);
             var pushData = JSON.parse(formData.payload);
+            console.log('Received paylod:', formData.payload);
 
             var commits = [];
             var pushCommits = pushData.commits;
