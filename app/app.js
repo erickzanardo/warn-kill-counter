@@ -1,11 +1,12 @@
 var http = require('http');
 var qs = require('querystring');
+var fs = require('fs');
 
 if (process.argv.length != 4) {
-    throw 'Invalid call, example, from user project pom directory run: "node warn-kill-counter/app/app.js https://warning-kill-ranks.firebaseio.com/dev 8080"'
+    throw 'Invalid call, example, from user project pom directory run: "/path/to/file 8080"'
 }
 
-var basePath = process.argv[2];
+var filePath = process.argv[2];
 var serverPort = parseInt(process.argv[3])
 
 var GITHUB_COMMAND = 'git pull origin master && git checkout ';
@@ -17,9 +18,6 @@ var exec = require('child_process').exec;
 var executing = false;
 var queue = [];
 
-var Firebase = require('firebase');
-var baseRef = new Firebase(basePath);
-
 var executeCommit = function () {
     var commit = queue.shift();
     console.log('Executing: ' + commit.id);
@@ -29,8 +27,11 @@ var executeCommit = function () {
 
             console.log('WARNINGs founds:' + stdout);
 
-            baseRef.once('value', function(snapshot) {
-                var baseData = JSON.parse(snapshot.val());
+            fs.readFile(filePath, function(err, data) {
+                if (err) {
+                    throw err;
+                }
+                var baseData = JSON.parse(data.toString());
 
                 var baseWarns = baseData.warns;
                 var actualWarns = parseInt(stdout);
@@ -55,8 +56,10 @@ var executeCommit = function () {
                 }
                 baseData.warns = baseWarns - points;
 
-                baseRef.set(JSON.stringify(baseData), function(error) {
-                    console.log('Done commit: ' + commit.id);
+                fs.writeFile(filePath, JSON.stringify(baseData), function (err) {
+                    if (err) return console.log(err);
+                    console.log('Done: ' + commit.id);
+
                     if (queue.length) {
                         executeCommit();
                     } else {
