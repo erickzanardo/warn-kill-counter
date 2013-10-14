@@ -1,12 +1,8 @@
 (function () {
-    angular.module('rank', ['firebase'])
-            .controller('Controller', ['$scope', '$http', 'angularFire',
-     function ($scope, $http, angularFire) {
+     Controller = function ($scope, $http) {
         $scope.members = [];
-        var baseRef = new Firebase('https://warning-kill-ranks.firebaseio.com/dev');
          
-        var promise = angularFire(baseRef, $scope, 'data', '');
-        promise.then(function() {
+        $http.get('data.js').success(function() {
             var data = JSON.parse($scope.data);
             for (var i in data.users) {
                 var d = data.users[i];
@@ -19,7 +15,7 @@
             }
             fetchUsers($scope, $http);
         });
-    }]);
+    }
                                                              
     var BASE_URL = "https://api.github.com/users/";
     
