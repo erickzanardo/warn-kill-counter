@@ -20,6 +20,13 @@ var queue = [];
 
 var executeCommit = function () {
     var commit = queue.shift();
+    
+    if (!commit.id) {
+        console.log('Tried to process an empty commit!');
+        executing = false;
+        return;
+    }
+    
     console.log('Executing: ' + commit.id);
     exec(GITHUB_COMMAND + commit.id, function(error, stdout, stderr) {
         console.log(stdout, stderr);
