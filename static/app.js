@@ -15,7 +15,7 @@
             });
             
             for (var i in users) {
-                var d = data.users[i];
+                var d = users[i];
                 var user = {
                     username:  d.username,
                     kills: d.kills,
