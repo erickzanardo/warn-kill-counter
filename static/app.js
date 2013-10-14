@@ -3,7 +3,14 @@
         $scope.members = [];
          
         $http.get('data.js').success(function(data) {
-            var users = data.users.sort(function (a, b) {
+            
+            var _users = [];
+            
+            for (var i in data.users) {
+                _users.push(data.users[i]);
+            }
+            
+            var users = _users.sort(function (a, b) {
                 return b.kills - a.kills; 
             });
             
