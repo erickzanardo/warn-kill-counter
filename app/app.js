@@ -6,6 +6,10 @@ if (process.argv.length != 4) {
     throw 'Invalid call, example, from user project pom directory run: "/path/to/file 8080"';
 }
 
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ' + err);
+});
+
 var filePath = process.argv[2];
 var serverPort = parseInt(process.argv[3]);
 
