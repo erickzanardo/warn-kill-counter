@@ -3,16 +3,16 @@ var qs = require('querystring');
 var fs = require('fs');
 
 if (process.argv.length != 4) {
-    throw 'Invalid call, example, from user project pom directory run: "/path/to/file 8080"'
+    throw 'Invalid call, example, from user project pom directory run: "/path/to/file 8080"';
 }
 
 var filePath = process.argv[2];
-var serverPort = parseInt(process.argv[3])
+var serverPort = parseInt(process.argv[3]);
 
 var GITHUB_COMMAND = 'git pull origin master && git checkout ';
 var MAVEN_COMMAND = 'mvn clean install -Dmaven.test.skip.exec=true -Dmaven.compiler.showDeprecation=true > /tmp/warn_out && cat /tmp/warn_out | grep WARNING | grep deprecated | wc -l';
 
-var sys = require('sys')
+var sys = require('sys');
 var exec = require('child_process').exec;
 
 var executing = false;
@@ -20,13 +20,6 @@ var queue = [];
 
 var executeCommit = function () {
     var commit = queue.shift();
-    
-    if (!commit.id) {
-        console.log('Tried to process an empty commit!');
-        executing = false;
-        return;
-    }
-    
     console.log('Executing: ' + commit.id);
     exec(GITHUB_COMMAND + commit.id, function(error, stdout, stderr) {
         console.log(stdout, stderr);
@@ -101,34 +94,22 @@ http.createServer(function (request, response) {
 
             var commits = [];
             var pushCommits = pushData.commits;
-            for (var i = 0; i < pushCommits.length; i++) {
-                
-                var pushCommit = pushCommits[i];
-                if (!pushCommit || !pushCommit.committer) {
-                    console.log('Received commit without info, ignoring');
-                }
-                
-                var message = pushCommit.message;
-                
-                if (message.indexOf('Merge branch') != -1) {
-                    console.log('Ignoring merge commit: ' + pushCommit.id);
-                    continue;
-                }
-                
-                var commit = {
+            console.log('Received '+ pushCommits.length +' commits on pushData');
+            var pushCommit = pushData.commits.pop();
+            
+            if (pushCommit) {
+                var pushLastCommit = {
                     author: pushCommit.committer.username,
                     id: pushCommit.id
                 };
-                commits.push(commit);
-            }
-            
-            for (var i = 0; i < commits.length; i++) {
-                queue.push(commits[i]);
-            }
-            
-            if (!executing) {
-                executing = true;
-                executeCommit();
+                console.log('pushLastCommit.author '+ pushLastCommit.author + ', pushLastCommit.id ' + pushLastCommit.id);
+                
+                queue.push(pushLastCommit);
+                
+                if (!executing) {
+                    executing = true;
+                    executeCommit();
+                }
             }
             
             response.end('Done!');
