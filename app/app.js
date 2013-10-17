@@ -104,6 +104,9 @@ http.createServer(function (request, response) {
             for (var i = 0; i < pushCommits.length; i++) {
                 
                 var pushCommit = pushCommits[i];
+                if (!pushCommit || !pushCommit.committer) {
+                    console.log('Received commit without info, ignoring');
+                }
                 
                 var message = pushCommit.message;
                 
